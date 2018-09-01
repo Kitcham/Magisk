@@ -69,7 +69,7 @@
     <string name="app_translators">Translators</string>
     <string name="support_thread">Support thread</string>
     <string name="follow_twitter">Follow me on Twitter</string>
-
+    <string name="cn_repo_text">Magisk-Modules-Repo-CN</string>
     <!--Toasts, Dialogs-->
     <string name="close">Close</string>
     <string name="repo_install_title">Install %1$s</string>

@@ -84,6 +84,7 @@ public class Const {
         public static final String PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CC7FZ7526MNGG";
         public static final String PATREON_URL = "https://www.patreon.com/topjohnwu";
         public static final String TWITTER_URL = "https://twitter.com/topjohnwu";
+        public static final String CN_REPO_URL = "https://github.com/Magisk-Modules-Repo-CN";
         public static final String XDA_THREAD = "http://forum.xda-developers.com/showthread.php?t=3432382";
         public static final String SOURCE_CODE_URL = "https://github.com/Magisk-Modules-Repo-CN/Magisk";
     }

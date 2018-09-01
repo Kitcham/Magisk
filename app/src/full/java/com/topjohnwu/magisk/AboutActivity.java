@@ -27,6 +27,7 @@ public class AboutActivity extends BaseActivity {
     @BindView(R.id.app_source_code) AboutCardRow appSourceCode;
     @BindView(R.id.support_thread) AboutCardRow supportThread;
     @BindView(R.id.follow_twitter) AboutCardRow twitter;
+    @BindView(R.id.cn_repo_info) AboutCardRow cnRepo;
 
     @Override
     public int getDarkTheme() {
@@ -66,6 +67,7 @@ public class AboutActivity extends BaseActivity {
         appSourceCode.setOnClickListener(v -> Utils.openLink(this, Uri.parse(Const.Url.SOURCE_CODE_URL)));
         supportThread.setOnClickListener(v -> Utils.openLink(this, Uri.parse(Const.Url.XDA_THREAD)));
         twitter.setOnClickListener(v -> Utils.openLink(this, Uri.parse(Const.Url.TWITTER_URL)));
+        cnRepo.setOnClickListener(v -> Utils.openLink(this, Uri.parse(Const.Url.CN_REPO_URL)));
 
         setFloating();
     }
