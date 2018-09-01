@@ -80,6 +80,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         suNotification = (ListPreference) findPreference(Const.Key.SU_NOTIFICATION);
         multiuserMode = (ListPreference) findPreference(Const.Key.SU_MULTIUSER_MODE);
         namespaceMode = (ListPreference) findPreference(Const.Key.SU_MNT_NS);
+        SwitchPreference cnRepo = (SwitchPreference) findPreference(Const.Key.CN_REPO);
         SwitchPreference reauth = (SwitchPreference) findPreference(Const.Key.SU_REAUTH);
         SwitchPreference fingerprint = (SwitchPreference) findPreference(Const.Key.SU_FINGERPRINT);
 

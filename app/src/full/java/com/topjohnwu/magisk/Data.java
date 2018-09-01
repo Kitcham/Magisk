@@ -53,6 +53,7 @@ public class Data {
     public static int suLogTimeout = 14;
     public static int suAccessState;
     public static boolean suFingerprint;
+    public static boolean cnRepo;
     public static int multiuserMode;
     public static int suResponseType;
     public static int suNotificationType;
@@ -162,6 +163,7 @@ public class Data {
 
         // config
         isDarkTheme = mm.prefs.getBoolean(Const.Key.DARK_THEME, false);
+        cnRepo = mm.prefs.getBoolean(Const.Key.CN_REPO, true);
         updateChannel = Utils.getPrefsInt(mm.prefs, Const.Key.UPDATE_CHANNEL, Const.Value.STABLE_CHANNEL);
         repoOrder = mm.prefs.getInt(Const.Key.REPO_ORDER, Const.Value.ORDER_DATE);
     }
@@ -173,6 +175,7 @@ public class Data {
                 .putBoolean(Const.Key.HOSTS, Const.MAGISK_HOST_FILE.exists())
                 .putBoolean(Const.Key.COREONLY, Const.MAGISK_DISABLE_FILE.exists())
                 .putBoolean(Const.Key.SU_FINGERPRINT, suFingerprint)
+                .putBoolean(Const.Key.CN_REPO, cnRepo)
                 .putString(Const.Key.SU_REQUEST_TIMEOUT, String.valueOf(suRequestTimeout))
                 .putString(Const.Key.SU_AUTO_RESPONSE, String.valueOf(suResponseType))
                 .putString(Const.Key.SU_NOTIFICATION, String.valueOf(suNotificationType))
