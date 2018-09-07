@@ -23,11 +23,11 @@
     - [resetprop](tools.md#resetprop)
     - [magiskhide](tools.md#magiskhide)
 - [模块](modules.md)
-    - [Modules and Templates](modules.md#magisk-module-format)
-    - [Submit Modules to Repo](https://github.com/topjohnwu/Magisk_Repo_Submissions)
+    - [模块与模板](modules.md#magisk-module-format)
+    - [提交模块到Repo](https://github.com/topjohnwu/Magisk_Repo_Submissions)
 - [提示与技巧](tips.md)
-    - [Remove Files](tips.md#remove-files)
-    - [Remove Folders](tips.md#remove-folders)
+    - [删除文件](tips.md#remove-files)
+    - [删除文件夹](tips.md#remove-folders)
 
     
 ## Introduction
