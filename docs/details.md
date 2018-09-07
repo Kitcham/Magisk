@@ -51,7 +51,7 @@
 ### 注意
 - 如果你想替换`/vendor`中的文件，请将其置于`$MODPATH/system/vendor`目录下。Magisk将同时接管两个目录，无论vendor是独立的或内含的，开发者无需理会。
 - 有时，完全替换文件夹是不可避免的。例如你想替换原装系统中的`/system/priv-app/SystemUI`。在原装系统中，系统应用通常带有预优化文件。 假如你替换的`SystemUI.apk`是deodexed化的 （这是最通常的情况），你想替换整个`/system/priv-app/SystemUI`以确保该文件夹仅包含修改过的不带有预优化文件的`SystemUI.apk`。
-- 如果你正在使用 [Magisk模块模板](https://github.com/topjohnwu/magisk-module-template)，你可以在`config.sh`文件中列出一个你想替换的文件夹的清单。安装脚本将会为你在列出的文件夹中创建 `.replace`文件。
+- 如果你正在使用 [Magisk模块模板](https://github.com/topjohnwu/magisk-module-template)，你可以在`config.sh`文件中列出一个你想替换的文件夹的清单。安装脚本将会为你在列出的文件夹中创建`.replace`文件。
 
 ## Simple Mount 技术细节
 （注意: 这一部分大多数不被赞成使用，从开始采用 A/B 分区的设备开始，由于OTA增量更新应用于boot，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限)
