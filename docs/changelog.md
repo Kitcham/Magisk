@@ -1,8 +1,8 @@
-# Changelog
+# 更新日志
 - 2017.8.16
-    - Initial version for Magisk v13.5
+    - 初始版本 Magisk v13.5
 - 2017.9.28
-    - Update applets info to Magisk v14.1
-    - Add OTA tips
+    - 更新 applets info，更新至 Magisk v14.1
+    - 增加 OTA 提示
 - 2017.1.8
-    - Update to Magisk v15.2
+    - 更新至 Magisk v15.2
