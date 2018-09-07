@@ -1,59 +1,59 @@
-## Boot Stages
-If you are working on complicated projects, you shall need more control to the whole process. Magisk can run scripts in different boot stages, so you can fine tune exactly what you want to do. It's recommended to read this documentation along with the procedure graph.
+## 启动模式
+如果你正在处理较为复杂的项目，你应当对整个项目有更充分的掌控。Magisk可以在不同的启动状态上运行脚本，因此你可以按你所想地去精确微调项目。建议你一同阅读流程图与本文档。+
 
 - post-fs mode
-    - **This stage is BLOCKING. Boot process will NOT continue until everything is done, or 10 seconds has passed**
-    - Happens after most partitions are mounted. `/data` might not be available since `vold` is not started yet
-    - Magisk will bind mount files under `/cache/magisk_mount/system` and `/cache/magisk_mount/vendor`
-    - It is only **Simple Mount**, which means it will replace existing files, but cannot add/remove files.
-    - This part is mostly deprecated (reasons in details)
+    - **该模式以阻塞方式运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
+    - 仅在大部分分区挂载后发挥作用。 `/data` 或许在 `vold` 执行前不可用。
+    - Magisk将会绑定挂载`/cache/magisk_mount/system` 和 `/cache/magisk_mount/vendor`目录下的文件。
+    - 这仅仅是**Simple Mount**, 这意味着它将会覆盖已存在的文件，但不能添加/删除文件。
+    - 这一部分很不被赞成使用 (具体原因将逐一展开)
 - post-fs-data mode
-    - **This stage is BLOCKING. Boot process will NOT continue until everything is done, or 10 seconds has passed**
-    - Happens after `/data` is ready (including the case when `/data` is encrypted)
-    - Happens before Zygote and system servers are started (which means pretty much everything)
-    - `/data/adb/magisk.img` will be merged, trimmed, and mounted to `MOUNTPOINT=/sbin/.core/img`
-    - Magisk will run scripts under `$MOUNTPOINT/.core/post-fs-data.d`
-    - Magisk will run scripts: `$MOUNTPOINT/$MODID/post-fs-data.sh` (placed in each module directory)
-    - Magisk will finally **Magisk Mount** module files
+    - **该模式以阻塞方式运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
+    - 在 `/data` 已经准备好后执行（包括 `/data` 已被加密的情况）。
+    - 在 Zygote和系统服务已启动后执行（这意味着所有进程已经加载好）。
+    - `/data/adb/magisk.img` 将会被合并,整合并挂载到 `MOUNTPOINT=/sbin/.core/img`
+    - Magisk将在`$MOUNTPOINT/.core/post-fs-data.d`下运行脚本
+    - Magisk将运行以下脚本: `$MOUNTPOINT/$MODID/post-fs-data.sh` （已保存在每个模块的目录中）。
+    - Magisk将最后 **Magisk Mount（Magisk挂载）** 模块文件。
 - late_start service mode
-    - **This stage is NON-BLOCKING, it will run in parallel with other processes**
-    - Happens when class late_start is triggered
-    - The daemon will wait for the full `sepolicy` patch before running this stage, so SELinux is guaranteed to be fully patched
-    - Put time consuming scripts here. Boot process will get stuck if it took too long to finish your tasks in `post-fs-data`
-    - **It is recommended to run all scripts in this stage**, unless your scripts requires doing stuffs before Zygote is started
-    - Magisk will run scripts under `$MOUNTPOINT/.core/service.d`
-    - Magisk will run scripts: `$MOUNTPOINT/$MODID/service.sh` (placed in each module directory)
+    - **该模式以阻塞方式运行。此模式下Magisk将会与其他进程并行执行。**
+    - 仅在 late_start 类被触发时执行。
+    - 守护进程将在运行此模式前等待`sepolicy`的完整校验，因此SELinux将会被确保完整校验。
+    - 将较为耗时的脚本放于这时执行。若脚本耗费太长时间执行你在`post-fs-data`中的任务，启动进程将会被卡住。
+    - **推荐在该模式下运行所有脚本**，除非你的脚本需要在 Zygote 启动前执行某些任务。
+    - Magisk将在`$MOUNTPOINT/.core/service.d`下运行脚本
+    - Magisk将运行以下脚本: `$MOUNTPOINT/$MODID/service.sh` （已保存在每个模块的目录中）。
 
-## Magic Mount Details
-### Terminology
-- **Item**: A folder, file, or symbolic link
-- **Leaf**: An item that is on the very end of a directory structure tree. It can be either a file or symbolic link
-- **`$MODPATH`**: A variable to represent the path of a module folder
-- **Source item**: An item under `$MODPATH/system`, for example, `$MODPATH/system/bin/app_process32` is a source item
-- **Existing item**: An item in the actual filesystem, for example, `/system/bin/app_process32` is an existing item
-- **Target item**: The corresponding item of a source item. For example, the target item of `$MODPATH/system/bin/app_process32` is `/system/bin/app_process32`
+## Magic Mount 技术细节
+### 术语
+- **Item**: 一个文件夹，文件，或符号链接
+- **Leaf**: 一个在目录结构树末端的item。 它可以是一个文件或一个符号链接
+- **`$MODPATH`**: 一个表示模块文件夹路径的变量
+- **Source item**: 一个在`$MODPATH/system`目录下的item，例如， `$MODPATH/system/bin/app_process32`是一个source item
+- **Existing item**: 一个在实际文件系统中的item，例如， `/system/bin/app_process32`是一个existing item
+- **Target item**: source item的对应项。例如，一个 `$MODPATH/system/bin/app_process32`的target item是 `/system/bin/app_process32`
 
-Note: A target item **does not** imply it is an existing item. A target item might not exist in the actual filesystem
+注意: 一个target item**不**意味着它是一个existing item。一个target item可能并不存在于真实文件系统
 
-### Policies
-- For a source leaf: if its target item is also an existing item, the existing item will be replaced with the source leaf
-- For a source leaf: if its target item is not an existing item, the source leaf will be added to the path of its target item
-- For any existing item that's not a target item, it will stay intact
+### 策略
+- 对于source leaf:如果它的target item也是一个existing item，这个existing item将会被该source leaf所覆盖
+- 对于source leaf:如果它的target item不是一个existing item，这个source leaf将会被添加到它的target item的路径中
+- 对于任意一个不是target item的existing item，它将保持原状
 
-Above is the rule of thumb. Basically it means that Magic Mount merges the two folders, `$MODPATH/system` into `/system`. A simpler way to understand is to think as the items is dirty copied from `$MODPATH/system` into `/system`.
+以上均为经验规则。基本意思是Magic Mount合并两个文件夹，将`$MODPATH/system`置于`/system`中，一种更加易于理解的方法是将items认为是从`$MODPATH/system`复制到`/system`中的一个简单快速的拷贝。
 
-However, an addition rule will override the above policies:
+然而，一个附加规则将推翻以上的策略:
 
-- For a source folder containing the file `.replace`, the source folder will be treated as if it is a leaf. That is, the items within the target folder will be completely discarded, and the target folder will be replaced with the source folder.
+- 对于包含这个`.replace`文件的source folder，该source folder将被视为一个leaf。即在该target folder的items将被完全丢弃，与此同时，该target folder将被该source folder所覆盖。
 
-Directories containing a file named `.replace` will **NOT** be merged, instead it directly replaces the target directory. A simpler way to understand is to think as if it wipes the target folder, and then copies the whole folder to the target path.
+目录中被命名为`.replace`的文件将**不会**被合并，它将直接覆盖目标目录。一种更加易于理解的方法是将其视为抹除了target folder，然后复制了整个文件夹到target path。
 
-### Notes
-- If you want to replace files in `/vendor`, please place it under `$MODPATH/system/vendor`. Magisk will handle both cases, whether the vendor partition is separated or not under-the-hood, developers don't need to bother.
-- Sometimes, completely replacing a folder is inevitable. For example you want to replace `/system/priv-app/SystemUI` in your stock rom. In stock roms, system apps usually comes with pre-optimized files. If your replacement `SystemUI.apk` is deodexed (which is most likely the case), you would want to replace the whole `/system/priv-app/SystemUI` to make sure the folder only contains the modified `SystemUI.apk` without the pre-optimized files.
-- If you are using the [Magisk Module Template](https://github.com/topjohnwu/magisk-module-template), you can create a list of folders you want to replace in the file `config.sh`. The installation scripts will handle the creation of `.replace` files into the listed folders for you.
+### 注意
+- 如果你想替换`/vendor`中的文件，请将其置于`$MODPATH/system/vendor`目录下。Magisk将同时接管两个目录，无论vendor是独立的或内含的，开发者无需理会。
+- 有时，完全替换文件夹是不可避免的。例如你想替换原装系统中的`/system/priv-app/SystemUI`。在原装系统中，系统应用通常带有预优化文件。 假如你替换的`SystemUI.apk`是deodexed化的 （这是最通常的情况），你想替换整个`/system/priv-app/SystemUI`以确保该文件夹仅包含修改过的不带有预优化文件的`SystemUI.apk`。
+- 如果你正在使用 [Magisk模块模板](https://github.com/topjohnwu/magisk-module-template)，你可以在`config.sh`文件中列出一个你想替换的文件夹的清单。安装脚本将会为你在列出的文件夹中创建 `.replace`文件。
 
-## Simple Mount Details
-(Note: this part is mostly deprecated, since starting with devices using A/B partitions, there is no longer a dedicated partition for cache because OTAs are applied live at boot. Instead, `/cache` now points to `/data/cache`, which means `post-fs` mode does not have access to `/cache` anymore)
+## Simple Mount 技术细节
+（注意: 这一部分大多数不被赞成使用，从开始采用 A/B 分区的设备开始，由于OTA增量更新应用于boot，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限)
 
-Some files require to be mounted much earlier in the boot process, currently known are bootanimation and some libs (most users won't change them). You can simply place your modified files into the corresponding path under `/cache/magisk_mount`. For example, you want to replace `/system/media/bootanimation.zip`, copy your new boot animation zip to `/cache/magisk_mount/system/media/bootanimation.zip`, and Magisk will mount your files in the next reboot. Magisk will **clone all the attributes from the target file**, which includes selinux context, permission mode, owner, group. This means you don't need to worry about the metadata for files placed under `/cache/magisk_mount`: just copy the file to the correct place, reboot then you're done!
+一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以简单地将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画的zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境,许可模式,管理员,组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据: 只要将文件复制到正确的位置，重启就大功告成了!
