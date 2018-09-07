@@ -1,20 +1,20 @@
-# Magisk Documentations
-(Updated on 2018.1.8) ([Changelog](changelog.md))
+# Magisk文档
+(于2018.1.8更新) ([更新日志](changelog.md))
 
-## Table of Contents
+## 目录
 
-- [Introduction](#introduction)
-- [Tips and Tricks](tips.md)
-    - [OTA Installation Tips](tips.md#ota-installation-tips)
+- [简介](#introduction)
+- [提示与技巧](tips.md)
+    - [OTA增量更新提示](tips.md#ota-installation-tips)
 
-The following are for developers
+以下内容供开发者阅读
 
-- [Procedure Diagram](https://cdn.rawgit.com/topjohnwu/Magisk/7d1082b1cb91db90ed0a29d8b092723fc3d69c58/docs/procedures.html)
-- [Magisk Details](details.md)
+- [流程图](https://cdn.rawgit.com/topjohnwu/Magisk/7d1082b1cb91db90ed0a29d8b092723fc3d69c58/docs/procedures.html)
+- [Magisk技术细节](details.md)
     - [Boot Stages](details.md#boot-stages)
     - [Magic Mount Details](details.md#magic-mount-details)
     - [Simple Mount Details](details.md#simple-mount-details)
-- [Available Tools](tools.md)
+- [可用工具](tools.md)
     - [magiskboot](tools.md#magiskboot)
     - [magiskinit](tools.md#magiskinit)
     - [magiskpolicy](tools.md#magiskpolicy)
@@ -22,15 +22,15 @@ The following are for developers
     - [su](tools.md#su)
     - [resetprop](tools.md#resetprop)
     - [magiskhide](tools.md#magiskhide)
-- [Modules](modules.md)
+- [模块](modules.md)
     - [Modules and Templates](modules.md#magisk-module-format)
     - [Submit Modules to Repo](https://github.com/topjohnwu/Magisk_Repo_Submissions)
-- [Tips and Tricks](tips.md)
+- [提示与技巧](tips.md)
     - [Remove Files](tips.md#remove-files)
     - [Remove Folders](tips.md#remove-folders)
 
     
 ## Introduction
-Magisk is a suite of open source tools for devices running Android version higher than 5.0 Lollipop (API 21). It establishes an environment which covers most stuffs you need for Android customization, such as root, boot scripts, SELinux patches, AVB2.0 / dm-verity / forceencrypt patches etc..
+Magisk是一种运行在Android版本大于5.0 Lollipop (API 21).的设备上的开源工具套件。它建立了一个包含大多数基础包的可用于定制Android的环境，例如root， boot scripts， SELinux patches， AVB2.0 / dm-verity / forceencrypt patches 等等..
 
-Furthermore, Magisk provides a **Systemless Interface** to alter the system (or vendor) arbitrarily while the actual partitions stay completely intact, all of which accomplished by only patching the boot image. With its systemless nature along with several other hacks, Magisk can hide modifications from nearly any existing system integrity verifications, one of the main target is to hide from [Google's SafetyNet API](https://developer.android.com/training/safetynet/index.html).
+此外，Magisk 提供 **Systemless Interface** 以在保持真实分区完整性的前提下随时修改system （或 vendor），所有这些都仅仅是通过修补boot映像来完成的。 得益于其自带的systemless与一些篡改手段，Magisk可以隐藏系统修改，并几乎可以绕过几乎所有市面上的系统完整性校验，主要目标之一就是绕过[Google's SafetyNet API](https://developer.android.com/training/safetynet/index.html)。
