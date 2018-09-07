@@ -31,6 +31,6 @@
 
     
 ## 简介
-Magisk是一种运行在Android版本大于5.0 Lollipop (API 21).的设备上的开源工具套件。它建立了一个包含大多数基础包的可用于定制Android的环境，例如root， boot scripts， SELinux patches， AVB2.0 / dm-verity / forceencrypt patches 等等..
+Magisk是一种运行在Android版本大于5.0 Lollipop (API 21).的设备上的开源工具套件。它建立了一个包含大多数基础包的可用于定制Android的环境，例如root， boot scripts， SELinux patches， AVB2.0 / dm-verity / forceencrypt patches 等等……
 
 此外，Magisk 提供 **Systemless Interface** 以在保持真实分区完整性的前提下随时修改system （或 vendor），所有这些都仅仅是通过修补boot映像来完成的。 得益于其自带的systemless与一些篡改手段，Magisk可以隐藏系统修改，并几乎可以绕过几乎所有市面上的系统完整性校验，主要目标之一就是绕过[Google's SafetyNet API](https://developer.android.com/training/safetynet/index.html)。
