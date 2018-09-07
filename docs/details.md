@@ -10,18 +10,18 @@
 - post-fs-data mode
     - **该模式以阻塞方式运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
     - 在 `/data` 已经准备好后执行（包括 `/data` 已被加密的情况）。
-    - 在 Zygote和系统服务已启动后执行（这意味着所有进程已经加载好）。
+    - 在 Zygote 和系统服务已启动后执行（这意味着所有进程已经加载好）。
     - `/data/adb/magisk.img` 将会被合并,整合并挂载到 `MOUNTPOINT=/sbin/.core/img`
-    - Magisk将在`$MOUNTPOINT/.core/post-fs-data.d`下运行脚本
+    - Magisk将在`$MOUNTPOINT/.core/post-fs-data.d`目录下运行脚本
     - Magisk将运行以下脚本: `$MOUNTPOINT/$MODID/post-fs-data.sh` （已保存在每个模块的目录中）。
     - Magisk将最后 **Magisk Mount（Magisk挂载）** 模块文件。
 - late_start service mode
-    - **该模式以阻塞方式运行。此模式下Magisk将会与其他进程并行执行。**
+    - **该模式以非阻塞方式运行。此模式下Magisk将会与其他进程并行处理。**
     - 仅在 late_start 类被触发时执行。
     - 守护进程将在运行此模式前等待`sepolicy`的完整校验，因此SELinux将会被确保完整校验。
     - 将较为耗时的脚本放于这时执行。若脚本耗费太长时间执行你在`post-fs-data`中的任务，启动进程将会被卡住。
     - **推荐在该模式下运行所有脚本**，除非你的脚本需要在 Zygote 启动前执行某些任务。
-    - Magisk将在`$MOUNTPOINT/.core/service.d`下运行脚本
+    - Magisk将在`$MOUNTPOINT/.core/service.d`目录下运行脚本
     - Magisk将运行以下脚本: `$MOUNTPOINT/$MODID/service.sh` （已保存在每个模块的目录中）。
 
 ## Magic Mount 技术细节
@@ -40,9 +40,9 @@
 - 对于source leaf:如果它的target item不是一个existing item，这个source leaf将会被添加到它的target item的路径中
 - 对于任意一个不是target item的existing item，它将保持原状
 
-以上均为经验规则。基本意思是Magic Mount合并两个文件夹，将`$MODPATH/system`置于`/system`中，一种更加易于理解的方法是将items认为是从`$MODPATH/system`复制到`/system`中的一个简单快速的拷贝。
+以上提到的均为经验规则。基本大意是Magic Mount会合并两个文件夹，将`$MODPATH/system`置于`/system`中，一种更加易于理解的方法是将items认为是从`$MODPATH/system`复制到`/system`中的一个简单快速的拷贝(dirty copied)。
 
-然而，一个额外的规则将推翻以上的策略:
+但有一个额外的规则将会推翻以上的所有策略:
 
 - 对于包含这个`.replace`文件的source folder，该source folder将被视为一个leaf。即在该target folder的items将被完全丢弃，与此同时，该target folder将被该source folder所覆盖。
 
@@ -56,4 +56,4 @@
 ## Simple Mount 技术细节
 （注意: 这一部分大多数不被赞成使用，从开始采用 A/B 分区的设备开始，由于OTA增量更新直接在boot阶段应用，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限)
 
-一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以简单地将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画的zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境,许可模式,管理员,组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据: 只要将文件复制到正确的位置，重启就大功告成了!
+一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以直接将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画的zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境,许可模式,管理员,组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据: 只要将文件复制到正确的位置，重启设备，一切工作就大功告成了!
