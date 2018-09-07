@@ -54,6 +54,6 @@
 - 如果你正在使用 [Magisk模块模板](https://github.com/topjohnwu/magisk-module-template)，你可以在`config.sh`文件中列出一个你想替换的文件夹的清单。安装脚本将会为你在列出的文件夹中创建`.replace`文件。
 
 ## Simple Mount 技术细节
-（注意: 这一部分大多数不被赞成使用，从开始采用 A/B 分区的设备开始，由于OTA增量更新应用于boot，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限)
+（注意: 这一部分大多数不被赞成使用，从开始采用 A/B 分区的设备开始，由于OTA增量更新直接在boot阶段应用，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限)
 
 一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以简单地将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画的zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境,许可模式,管理员,组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据: 只要将文件复制到正确的位置，重启就大功告成了!
