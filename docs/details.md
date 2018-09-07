@@ -42,7 +42,7 @@
 
 以上均为经验规则。基本意思是Magic Mount合并两个文件夹，将`$MODPATH/system`置于`/system`中，一种更加易于理解的方法是将items认为是从`$MODPATH/system`复制到`/system`中的一个简单快速的拷贝。
 
-然而，一个附加规则将推翻以上的策略:
+然而，一个额外的规则将推翻以上的策略:
 
 - 对于包含这个`.replace`文件的source folder，该source folder将被视为一个leaf。即在该target folder的items将被完全丢弃，与此同时，该target folder将被该source folder所覆盖。
 
