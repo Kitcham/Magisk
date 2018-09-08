@@ -56,4 +56,4 @@
 ## Simple Mount 技术细节
 （注意: 这一部分通常已被弃用，从开始采用 A/B 分区的设备开始，由于OTA增量更新直接在boot阶段应用，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限）
 
-一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以直接将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境,许可模式,管理员,组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据: 只要将文件复制到正确的位置，重启设备，一切工作就大功告成了!
+一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以直接将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境，许可模式，管理员，组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据：只要将文件复制到正确的位置，重启设备，一切工作就大功告成了!
