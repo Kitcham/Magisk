@@ -31,9 +31,9 @@
 - **`$MODPATH`**: 一个表示模块文件夹路径的变量
 - **Source item**: 一个在`$MODPATH/system`目录下的item，例如， `$MODPATH/system/bin/app_process32`是一个source item
 - **Existing item**: 一个在实际文件系统中的item，例如， `/system/bin/app_process32`是一个existing item
-- **Target item**: source item的对应项。例如，一个 `$MODPATH/system/bin/app_process32`的target item是 `/system/bin/app_process32`
+- **Target item**: source item的对应项。例如， `$MODPATH/system/bin/app_process32`的target item是 `/system/bin/app_process32`
 
-注意: 一个target item**不**意味着它是一个existing item。一个target item可能并不存在于真实文件系统
+注意: 一个target item **不** 意味着它是一个existing item。一个target item可能并不存在于真实文件系统
 
 ### 策略
 - 对于source leaf:如果它的target item也是一个existing item，这个existing item将会被该source leaf所覆盖
@@ -46,7 +46,7 @@
 
 - 对于包含这个`.replace`文件的source folder，该source folder将被视为一个leaf。即在该target folder的items将被完全丢弃，与此同时，该target folder将被该source folder所覆盖。
 
-目录中被命名为`.replace`的文件将**不会**被合并，它将直接覆盖目标目录。一种更加易于理解的方法是将其视为抹除了target folder，然后复制了整个文件夹到target path。
+目录中被命名为`.replace`的文件将 **不会** 被合并，它将直接覆盖目标目录。一种更加易于理解的方法是将其视为抹除了target folder，然后复制了整个文件夹到target path。
 
 ### 注意
 - 如果你想替换`/vendor`中的文件，请将其置于`$MODPATH/system/vendor`目录下。Magisk将同时接管两个目录，无论vendor是独立的或内含的，开发者无需理会。
@@ -56,4 +56,4 @@
 ## Simple Mount 技术细节
 （注意: 这一部分通常已被弃用，从开始采用 A/B 分区的设备开始，由于OTA增量更新直接在boot阶段应用，所以不再存在专门用于缓存的分区。取而代之，`/cache` 现在指向了 `/data/cache`，这意味着 `post-fs` 模式不再有 `/cache` 的访问权限）
 
-一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以直接将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将**从target file中克隆所有属性**，包含selinux环境，许可模式，管理员，组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据：只要将文件复制到正确的位置，重启设备，一切工作就大功告成了!
+一些文件要求在启动时较早挂载，目前已知的是一些开机动画和一些libs（大多数用户不会替换它们）。你可以直接将你修改好的文件置于`/cache/magisk_mount`的对应路径下。例如，你想替换`/system/media/bootanimation.zip`，复制你新的开机动画zip到 `/cache/magisk_mount/system/media/bootanimation.zip`，然后Magisk将在下次重启时挂载你的文件。Magisk将 **从target file中克隆所有属性** ，包含selinux环境，许可模式，管理员，组。这意味着你无需担心放置在`/cache/magisk_mount`中的元数据：只要将文件复制到正确的位置，重启设备，一切工作就大功告成了!
