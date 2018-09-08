@@ -2,13 +2,13 @@
 如果你正着手较为复杂的项目，你应当更好地对整个项目进行控制。Magisk可以在不同的启动模式中运行脚本，因此你可以按你所想的去精确微调项目。建议你一同阅读流程图(procedure graph)与本文档。
 
 - post-fs mode
-    - **该模式以阻塞方式运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
+    - **该模式以阻塞方式(BLOCKING)运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
     - 仅在大部分分区挂载后发挥作用。 `/data` 或许在 `vold` 执行前不可用。
     - Magisk将会绑定挂载`/cache/magisk_mount/system` 和 `/cache/magisk_mount/vendor`目录下的文件。
     - 这仅仅是**Simple Mount**, 这意味着它将会覆盖已存在的文件，但不能添加/删除文件。
     - 这一部分通常已被弃用 (具体原因将逐一展开)
 - post-fs-data mode
-    - **该模式以阻塞方式运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
+    - **该模式以阻塞方式(BLOCKING)运行。启动会直到所有进程加载完毕后或等待10秒后才继续进行。**
     - 在 `/data` 已经准备好后执行（包括 `/data` 已被加密的情况）。
     - 在 Zygote 和系统服务已启动后执行（这意味着所有进程已经加载完毕）。
     - `/data/adb/magisk.img` 将会被合并,整合并挂载到 `MOUNTPOINT=/sbin/.core/img`
@@ -16,7 +16,7 @@
     - Magisk将运行以下脚本: `$MOUNTPOINT/$MODID/post-fs-data.sh` （已保存在每个模块的目录中）。
     - Magisk将最后 **Magisk Mount（Magisk挂载）** 模块文件。
 - late_start service mode
-    - **该模式以非阻塞方式运行。此模式下Magisk将会与其他进程并行处理。**
+    - **该模式以非阻塞方式(NON-BLOCKING)运行。此模式下Magisk将会与其他进程并行处理。**
     - 仅在 late_start 类被触发时执行。
     - 守护进程将在运行此模式前等待`sepolicy`的完整校验，因此SELinux将会被确保完整校验。
     - 将较为耗时的脚本放于这时执行。若脚本耗费太长时间执行你在`post-fs-data`中的任务，启动进程将会被卡住。
