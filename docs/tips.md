@@ -1,53 +1,52 @@
-# Tips and Tricks
+# 技巧与窍门
 
-## OTA Installation Tips
-Magisk does modifications systemless-ly, which means applying official OTAs is much simpler. Here I provide a few tutorials for several different kind of devices to apply OTAs and preserve Magisk after the installation if possible.
+## OTA增量更新安装提示
+Magisk以systemless方式修改系统，这意味着应用官方的OTA增量更新变得更容易了。假如可能的话，这里我会针对不同的设备给出一些教程，以应用OTA增量更新和保存Magisk的安装状态。
 
-**This tutorial is only for Magisk v17.0+**
+**本教程仅适用于Magisk v17.0+**
 
-**NOTE: In order to apply OTAs, you HAVE to make sure you haven't modified `/system` (and `/vendor` if available) in any way. Even remounting the partition to rw will tamper block verification!!**
+**注意:为了应用OTA增量更新，你需要确保你没有以任何方式修改 `/system` （和 `/vendor` 假如可用）。甚至将分区重新挂载为可读写状态(rw)会篡改模块校验！！**
 
-#### Prerequisites
-1. Please disable *Automatic system updates* in developer options, so it won't install OTAs without your acknowledgement.  
+#### 前提
+1. 请在开发者选项中禁用 *Automatic system updates*，因此未经你确认时不会安装OTA增量更新。
     <img src="images/disable_auto_ota.png" width="250">
-1. When an OTA is available, first go to (Magisk Manager → Uninstall → Restore Images). **Do not reboot or you will have Magisk uninstalled.** This will restore your boot (and dtbo if applicable) back to 100% untouched stock images in order to pass pre-OTA block verifications. **This step is required before doing any of the following steps written below!**  
+1. 当有可用的OTA增量更新时，请先（Magisk Manager → 卸载 → 还原原厂镜像）. **请不要重启你的设备，否则Magisk会被卸载** 这将会100%还原你的原厂镜像（和 dtbo 假如可用） 以通过OTA增量更新的预先校验**你必须在进行以下步骤前进行本步骤。**  
     <img src="images/restore_img.png" width="250">
 
-#### Devices with A/B Partitions
+#### 拥有A/B双分区的设备
 
-Due to the fact that these devices have two separate partitions, it is possible to have the OTA installed to the inactive slot and have Magisk Manager to install Magisk onto the updated partition. The out-of-the-box OTA installation works seamlessly and Magisk can be preserved after the installation.
-
-1. After restoring stock boot image, apply OTAs as you normally would (Settings → System → System Update).
-1. Wait for the installation to be fully done (both step 1 and step 2 of the OTA), **do not press the restart button!!** Instead, go to (Magisk Manager → Install → Install to Inactive Slot) and install Magisk to the slot that the OTA engine just updated.  
+由于此类设备拥有两个独立的分区，因此可以将OTA增量更新安装到非活动的位置中，并且使Magisk Manager安装Magisk到更新的分区中。开箱即用的OTA增量更新安装可以无缝进行，同时Magisk可以在OTA后保存安装状态。
+1. 在还原原厂镜像后，可以如同往常那样进行OTA增量更新（设置 → 系统 → 系统升级）。
+1. 等待更新完全安装完毕（包含第1步与OTA更新的第2步）， **请不要点击重启按钮！！**安装完毕后，到（Magisk Manager → 安装 → 安装至非活动位置）然后安装Magisk到OTA引擎刚刚更新完毕的位置。 
     <img src="images/ota_done.png" width="250"> <img src="images/install_inactive_slot.png" width="250">
-1. After installation is done, press the reboot button in Magisk Manager. Under-the-hood Magisk Manager forces your device to switch to the updated slot, bypassing any possible post-OTA verifications.  
+1. 在安装完成后，在Magisk Manager中点击重启按钮。掌控一切的Magisk Manager将强制你的设备切换到更新的系统中，绕过一切可能的post-OTA校验。  
     <img src="images/manager_reboot.png" width="250">
-1. After the reboot, your device should be fully updated, and most importantly, Magisk is still installed to the updated system!
+1. 在设备重启后，你的设备应该已经完全更新完毕，最重要的是，Magisk仍已安装到最新的系统之中！
 
-#### Devices with FlashFire Support
-(If you are using a device with A/B partitions, I **strongly** recommend you to use the method stated above since it uses the stock OTA installation mechanism and will always work under any circumstances)
+#### 支持FlashFire的设备
+（假如你正在使用拥有A/B双分区的设备，我 **强烈** 推荐你使用上述方法进行安装，因为它使用官方的OTA安装机制，并且在任何情况下都可以使用）
 
-The [FlashFire](https://play.google.com/store/apps/details?id=eu.chainfire.flash) app developed by Chainfire is a great app to apply OTAs and preserve root at the same time. However, there is a very high chance that it does not support your device/system combination, and unfortunately the app is no longer maintained by Chainfire so no additonal compatibility would be added in the future.
+由Chainfire开发的[FlashFire](https://play.google.com/store/apps/details?id=eu.chainfire.flash)是一个极好的用于安装OTA增量更新，并与此同时能够保持设备root状态的一款app。但是，有很高的概率不适配于你的设备/系统组合。遗憾的是，该款app的开发者Chainfire已不再维护，因此未来不会再兼容新的设备。
 
-1. After restoring the stock boot image, download the OTA (Settings → System → System Updates), **do not press reboot to install.**
-1. Open FlashFire, it should detect your OTA zip. Select OK in the popup dialog to let it do its setup.
-1. Please use the options shown in the screenshot below. The key point is to disable EverRoot (or it will install SuperSU), and add a new action to flash Magisk zip **after** the OTA update.zip (the update.zip should be auto generated in the previous step).  
+1. 在还原原厂镜像后，下载OTA增量更新（设置 → 系统 → 系统升级）， **请不要点击重启以安装**
+1. 打开FlashFire，它应该会检测你的OTA增量更新zip。在弹出的对话框中选择OK以让它完成安装。
+1. 请使用以下截图所展示的选项。关键步骤是禁用EverRoot（否则它将会安装SuperSU），然后在OTA update.zip（update.zip应该会在之前的步骤中自动生成）安装完成**之后**增加新任务刷写Magisk zip。  
     <img src="images/flashfire.png" width="250">
-1. Press the big **Flash** button, after a few minutes it should reboot and updated with Magisk installed.
+1. 请点击很大的**Flash（刷写）** 按钮，几分钟之后设备将自动重启并安装更新，同时附带Magisk。
 
-#### Legacy "Non A/B" Devices - General Case
-Unfortunately, there are no real good ways to apply OTAs on these devices. The following tutorial will not preserve Magisk - you will have to manually re-root your device after the upgrade, and this will require PC access. This is a general "best practice".
+#### 传统 "无A/B双分区"的设备 - 一般会是这种状况
+很遗憾，我们真的没有很好的方法在这种设备上去安装OTA增量更新。以下教程将不会保存Magisk安装状态 - 你需要在升级之后手动重新root你的设备，这需要用到PC。这一般是“最佳做法”了。
 
-1. To properly install OTAs, you must have your stock recovery installed on your device. If you have custom recovery installed, you can restore it from your previous backup, or dumps found online, or factory images provided by OEMs.  
-If you decide to start by installing Magisk without touching your recovery partition, you have a few choices, either way you will end up with a Magisk rooted device, but recovery remains stock untouched:
-    - If supported, use `fastboot boot <recovery_img>` to boot the custom recovery and install Magisk. 
-    - If you have a copy of your stock boot image dump, install Magisk by patching boot image via Magisk Manager, and manually flash it through download mode / fastboot mode / Odin.
-1. Once your device has stock recovery and stock boot image restored, download the OTA. Optionally, once you have downloaded the OTA update zip, you can find a way to copy the zip out, since you are still rooted. Personally, I extract the stock boot image and recovery image from the OTA zip for future usage (to patch via Magisk Manager or restore stock recovery etc.)
-1. Apply and reboot your device. This will use the official stock OTA installation mechanism of your device to upgrade your system.
-1. Once it's done you will be left with an upgraded, 100% stock, un-rooted device. You will have to manually flash Magisk back. Consider using the methods stated in step 1. to flash Magisk without touching the recovery partition if you want to receive stock OTAs frequently.
+1. 为了恰当地安装OTA增量更新，你必须在你的设备上安装官方版本的recovery，如果你安装了第三方recovery，你可以从先前的备份中，在网上，又或者是出厂OEM镜像中找到该文件并恢复。  
+如果你决定在不修改recovery分区的前提下安装Magisk， 你有几个选择，无论哪种方式，你都会得到一台由Magisk root的设备且recovery还保持出厂预装状态：
+    - 假如设备支持，使用 `fastboot boot <recovery_img>` 启动第三方recovery并安装Magisk。 ‘’‘’‘’‘’‘’‘’‘’‘’‘’
+    - 假如你有一份预装boot的转储副本，通过Magisk Manager以修补boot镜像的方式安装Magisk，然后通过download 模式 / fastboot 模式 / Odin手动刷写完成安装。
+1. 只要你的设备预装有recovery和boot的镜像恢复，下载该OTA，作为一个可选项，一旦你下载了OTA的update.zip，因为你的设备仍然是root状态,你可以寻找一种方法把这个zip复制出来。就个人而言，我从OTA增量更新包中提取了预装的boot镜像和recovery镜像以供将来备用（去通过Magisk Manager校验或重置Recovery等等。）
+1. 应用更新然后重启你的设备。这将会使用你设备上官方原厂的OTA安装机制去更新你的设备。
+1. 一旦完成之后，你将得到一个更新的100%完整预装的，未root的设备。你将需要手动将Magisk手动刷写回去。如果你想经常地接收到来自原厂的OTA更新，可以考虑使用步骤1中所述的方法在不修改recovery分区的前提下刷写Magisk。
 
-## Remove Files
-How to remove a file systemless-ly? To actually make the file **disappear** is complicated (possible, not worth the effort). **Replacing it with a dummy file should be good enough**! Create an empty file with the same name and place it in the same path within a module, it shall replace your target file with a dummy file.
+## 删除文件
+如何删除systemless的文件？实际上让文件 **消失** 是很复杂的（可能可以做到，但并不值得去花费功夫）。 **用一个虚拟文件替换它就足够了**！ 创建一个相同文件名的空文件并将其放于模块中相同的路径下，它将用虚拟文件覆盖目标文件。
 
-## Remove Folders
-Same as mentioned above, actually making the folder **disappear** is not worth the effort. **Replacing it with an empty folder should be good enough**! A handy trick for module developers using [Magisk Module Template](https://github.com/topjohnwu/magisk-module-template) is to add the folder you want to remove into the `REPLACE` list within `config.sh`. If your module doesn't provide a corresponding folder, it will create an empty folder, and automatically add `.replace` into the empty folder so the dummy folder will properly replace the one in `/system`.
+## 删除文件夹
+与上述提到的一样，让文件夹实际上 **消失** 并不值得我们去花费功夫。 **用空白文件夹覆盖它就已经是很好的办法了**！ 对于使用[Magisk Module Template](https://github.com/topjohnwu/magisk-module-template)的模块开发者来说，一个很方便有用的技巧是：将要删除的文件夹添加到 `config.sh` 的 `REPLACE` 列表中。如果你的模块没有提供相应的文件夹，它会创建一个空文件夹然后自动添加 `.replace` 到这个空文件夹中，因此虚拟文件夹会完全自动替换在`/system` 中的对应文件夹。
